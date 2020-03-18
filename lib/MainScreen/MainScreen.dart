@@ -13,7 +13,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-
+  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   String _title = 'Dashboard';
   int selectedDrawerParent = 0;
   int selectedDrawerNavigableChild = 0;
@@ -97,6 +97,16 @@ class _MainScreenState extends State<MainScreen> {
                 onTap: () => onSelectItem(0, 'Dashboard'),
               ),
               ExpansionTile(
+                onExpansionChanged: ((newState) {
+                  if (newState)
+                    setState(() {
+                      _drawerKey.currentState.collapse();
+                    });
+                  else
+                    setState(() {
+
+                    });
+                }),
                 leading: Icon(Icons.android),
                 title: Text("Emergency"),
                 children: <Widget>[
@@ -113,10 +123,13 @@ class _MainScreenState extends State<MainScreen> {
                     onTap: () => onSelectItem(1, 'Report'),
                   ),
                 ],
+
+
               ),
               ExpansionTile(
                 leading: Icon(Icons.phone_iphone),
                 title: Text("Admissions"),
+
                 children: <Widget>[
                   ListTile(
                     contentPadding: EdgeInsets.symmetric(horizontal: 72.0),
