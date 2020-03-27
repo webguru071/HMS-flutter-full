@@ -1,78 +1,91 @@
-/// Simple pie chart with outside labels example.
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterhms/MainScreen/Dashboard/InfiniteLoopTest.dart';
+import 'package:pie_chart/pie_chart.dart';
 
-class PieOutsideLabelChart extends StatelessWidget {
-  final List<charts.Series> seriesList;
-  final bool animate;
+// Sets a platform override for desktop to avoid exceptions. See
+// https://flutter.dev/desktop#target-platform-override for more info.
+void enablePlatformOverrideForDesktop() {
+  if (!kIsWeb && (Platform.isMacOS || Platform.isWindows || Platform.isLinux)) {
+    debugDefaultTargetPlatformOverride = TargetPlatform.fuchsia;
+  }
+}
 
-  PieOutsideLabelChart(this.seriesList, {this.animate});
+class SummaryTransactionPieChart extends StatefulWidget {
+  @override
+  _SummaryTransactionPieChartState createState() => _SummaryTransactionPieChartState();
+}
 
-  /// Creates a [PieChart] with sample data and no transition.
-  factory PieOutsideLabelChart.withSampleData() {
-    return new PieOutsideLabelChart(
-      _createSampleData(),
-      // Disable animations for image tests.
-      animate: true,
-    );
+class _SummaryTransactionPieChartState extends State<SummaryTransactionPieChart> {
+  bool toggle = false;
+  Map<String, double> dataMap = Map();
+  List<Color> colorList = [
+    Colors.red,
+    Colors.yellow,
+    Colors.blue,
+
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    dataMap.putIfAbsent("Purchase", () => 50000);
+    dataMap.putIfAbsent("Sales", () => 30000);
+    dataMap.putIfAbsent("Expense", () => 20000);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(top: 20.00),
-                child:Text('You have pushed the button this many times:'),
-              ),
-              Expanded(
-                child:  Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.only(bottom: 50.00),
-                  child: charts.PieChart(
-                    seriesList,
-                    animate: animate,
-                    defaultRenderer: new charts.ArcRendererConfig(
-                        arcRendererDecorators: [
-                          new charts.ArcLabelDecorator(
-                              labelPosition: charts.ArcLabelPosition.inside)
-                        ]),
-                  ),
-                ),
-              ),
-            ],
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.all(10.00),
+            child: Text(
+              'Summary of total transaction'
+            ),
           ),
+          Container(
+            margin: EdgeInsets.only(bottom: 30.00,top:10.00,right: 30.00,left:30.00),
+            child: Center(
+              child: toggle
+                  ? PieChart(
+                dataMap: dataMap,
+                animationDuration: Duration(milliseconds: 800),
+                chartLegendSpacing: 32.0,
+                chartRadius: MediaQuery.of(context).size.width,
+                showChartValuesInPercentage: false,
+                showChartValues: true,
+                showChartValuesOutside: false,
+                chartValueBackgroundColor: Colors.grey[200],
+                colorList: colorList,
+                showLegends: true,
+                legendPosition: LegendPosition.top,
+                decimalPlaces: 2,
+                showChartValueLabel: false,
+                initialAngle: 0,
+                chartValueStyle: defaultChartValueStyle.copyWith(
+                  color: Colors.black.withOpacity(1),
+                ),
+                chartType: ChartType.ring,
+              )
+                  : Text("Press FAB to show chart"),
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: togglePieChart,
+        child: Icon(Icons.insert_chart),
+      ),
     );
   }
 
-  /// Create one series with sample hard coded data.
-  static List<charts.Series<LinearSales, int>> _createSampleData() {
-    final data = [
-      new LinearSales(0, 100),
-      new LinearSales(1, 75),
-      new LinearSales(2, 25),
-    ];
-
-    return [
-      new charts.Series<LinearSales, int>(
-        id: 'Sales',
-        domainFn: (LinearSales sales, _) => sales.year,
-        measureFn: (LinearSales sales, _) => sales.sales,
-        data: data,
-        // Set a label accessor to control the text of the arc label.
-        labelAccessorFn: (LinearSales row, _) => '${row.year}: ${row.sales}',
-      )
-    ];
+  void togglePieChart() {
+    setState(() {
+      toggle = !toggle;
+    });
   }
-}
-
-/// Sample linear data type.
-class LinearSales {
-  final int year;
-  final int sales;
-
-  LinearSales(this.year, this.sales);
 }

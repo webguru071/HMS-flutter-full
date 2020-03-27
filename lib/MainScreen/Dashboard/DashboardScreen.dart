@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutterhms/MainScreen/Dashboard/AdmissionHistoryBarChart.dart';
 import 'package:flutterhms/MainScreen/Dashboard/DataTable.dart';
-import 'package:flutterhms/MainScreen/Dashboard/ExpansionTIleTests.dart';
-import 'package:flutterhms/MainScreen/Dashboard/NextScreen.dart';
+import 'package:flutterhms/MainScreen/Dashboard/InfiniteLoopTest.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutterhms/MainScreen/Dashboard/PieChart.dart';
-import 'FadeIn.dart';
-import '../../SplashScreen/Typo.dart';
+import 'package:flutterhms/MainScreen/Dashboard/SharedPrefTest.dart';
+
 
 
 
@@ -34,9 +33,9 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: CurvedNavigationBar(
-        color: Colors.black,
-        buttonBackgroundColor: Colors.black,
-        backgroundColor: Colors.grey,
+        color: Color(0xFF2247CA),
+        buttonBackgroundColor: Color(0xFF2247CA),
+        backgroundColor: Colors.white,
         height: 50,
         index: _page,
         //index: 0,
@@ -66,10 +65,10 @@ class _DashboardState extends State<Dashboard> {
             child: AdmissionBarChart(),
           ),
           Container(
-            child: PieOutsideLabelChart.withSampleData(),
+            child: SummaryTransactionPieChart(),
           ),
           Container(
-            child: BarChartSample2() ,
+            child: SharedPreferencesDemo() ,
           ),
           Container(
             child: BillsTable(),

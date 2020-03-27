@@ -9,10 +9,10 @@ class AdmissionBarChart extends StatefulWidget {
 
 class ClicksPerYear {
   final String year;
-  final int clicks;
+  final int value;
   final charts.Color color;
 
-  ClicksPerYear(this.year, this.clicks, Color color)
+  ClicksPerYear(this.year, this.value, Color color)
       : this.color = charts.Color(
             r: color.red, g: color.green, b: color.blue, a: color.alpha);
 }
@@ -29,19 +29,24 @@ class _AdmissionBarChartState extends State<AdmissionBarChart> {
   @override
   Widget build(BuildContext context) {
     var data = [
-      ClicksPerYear('2016', 12, Colors.blue),
-      ClicksPerYear('2017', 30, Colors.redAccent),
-      ClicksPerYear('2018', _counter, Colors.orange),
+      ClicksPerYear('Jan-11', 5, Colors.blue),
+      ClicksPerYear('Jan-12', 7, Colors.blue),
+      ClicksPerYear('Jan-13', 3, Colors.blue),
+      ClicksPerYear('Jan-14', 5, Colors.blue),
+      ClicksPerYear('Jan-15', 7, Colors.blue),
+      ClicksPerYear('Jan-16', 8, Colors.blue),
+      ClicksPerYear('Jan-17', 5, Colors.blue),
+    //  ClicksPerYear('2018', _counter, Colors.orange),
     ];
 
     var series = [
       charts.Series(
         domainFn: (ClicksPerYear clickData, _) => clickData.year,
-        measureFn: (ClicksPerYear clickData, _) => clickData.clicks,
+        measureFn: (ClicksPerYear clickData, _) => clickData.value,
         colorFn: (ClicksPerYear clickData, _) => clickData.color,
         id: 'Clicks',
         data: data,
-        labelAccessorFn: (ClicksPerYear row, _) => '${row.clicks}',
+        labelAccessorFn: (ClicksPerYear row, _) => '${row.value}',
 
       ),
     ];
@@ -61,7 +66,7 @@ class _AdmissionBarChartState extends State<AdmissionBarChart> {
 
         defaultRenderer: charts.BarRendererConfig(
             barRendererDecorator: charts.BarLabelDecorator(
-                labelPosition: charts.BarLabelPosition.inside),
+                labelPosition: charts.BarLabelPosition.outside),
         ),
 
     );
@@ -73,22 +78,24 @@ class _AdmissionBarChartState extends State<AdmissionBarChart> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.only(top: 20.00),
-              child:Text('You have pushed the button this many times:'),
+              margin: EdgeInsets.only(top: 15.00,bottom: 5.0),
+              child:Text('Admission List Of Last 7 Days'),
 
             ),
 
             Expanded(
                 child:Container(
-                  padding: EdgeInsets.all(10.00),
-                  margin: EdgeInsets.only(bottom: 10.00),
+                  //padding: EdgeInsets.all(10.00),
+                  margin: EdgeInsets.only(top: 10.00,bottom: 10.00,left: 5.00,right: 5.00),
                   child: chart,
                 )
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+
+   /*
+   floatingActionButton: FloatingActionButton(
         hoverColor: Colors.red,
         foregroundColor: Colors.deepPurple,
         backgroundColor: Colors.yellow,
@@ -96,6 +103,7 @@ class _AdmissionBarChartState extends State<AdmissionBarChart> {
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
+      */
     );
   }
 }
