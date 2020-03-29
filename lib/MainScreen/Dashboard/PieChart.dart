@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterhms/MainScreen/Dashboard/InfiniteLoopTest.dart';
 import 'package:pie_chart/pie_chart.dart';
 
 // Sets a platform override for desktop to avoid exceptions. See
@@ -19,7 +17,7 @@ class SummaryTransactionPieChart extends StatefulWidget {
 }
 
 class _SummaryTransactionPieChartState extends State<SummaryTransactionPieChart> {
-  bool toggle = false;
+  bool toggle = true;
   Map<String, double> dataMap = Map();
   List<Color> colorList = [
     Colors.red,

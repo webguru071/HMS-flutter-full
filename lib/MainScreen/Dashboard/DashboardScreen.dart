@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutterhms/MainScreen/Dashboard/AdmissionHistoryBarChart.dart';
-import 'package:flutterhms/MainScreen/Dashboard/DataTable.dart';
-import 'package:flutterhms/MainScreen/Dashboard/InfiniteLoopTest.dart';
+import 'package:flutterhms/MainScreen/Dashboard/BillsTable.dart';
+import 'package:flutterhms/MainScreen/Dashboard/TransactionTable.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutterhms/MainScreen/Dashboard/PieChart.dart';
-import 'package:flutterhms/MainScreen/Dashboard/SharedPrefTest.dart';
+import 'package:flutterhms/MainScreen/Dashboard/LineChart.dart';
 
 
 
@@ -68,13 +68,13 @@ class _DashboardState extends State<Dashboard> {
             child: SummaryTransactionPieChart(),
           ),
           Container(
-            child: SharedPreferencesDemo() ,
+            child: LineChart.withSampleData(),
           ),
           Container(
             child: BillsTable(),
           ),
           Container(
-            child: ExpansionTileTest(),
+            child: TransactionTable(),
           ),
         ],
       ),

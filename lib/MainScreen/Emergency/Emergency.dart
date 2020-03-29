@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutterhms/MainScreen/Dashboard/DashboardScreen.dart';
-import 'package:flutterhms/SplashScreen/Typo.dart';
 
 
 class Emergency extends StatefulWidget {
@@ -12,7 +10,7 @@ class _EmergencyState extends State<Emergency> with SingleTickerProviderStateMix
 
   List<Widget> containers = [
     Container(
-      child: Dashboard(),
+      color: Colors.red,
     ),
     Container(
       color: Colors.blue,
