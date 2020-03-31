@@ -1,52 +1,72 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
-class LineChart extends StatelessWidget {
-  final List<charts.Series> seriesList;
-  final bool animate;
+class LineChart extends StatefulWidget {
+  @override
+  _LineChartState createState() => _LineChartState();
+}
 
-  LineChart(this.seriesList, {this.animate});
-
-  /// Creates a [LineChart] with sample data and no transition.
-  factory LineChart.withSampleData() {
-    return new LineChart(
-      _createSampleData(),
-      // Disable animations for image tests.
-      animate: false,
-    );
-  }
-
-
+class _LineChartState extends State<LineChart> {
   @override
   Widget build(BuildContext context) {
-    return new charts.LineChart(seriesList, animate: animate);
-  }
-
-  /// Create one series with sample hard coded data.
-  static List<charts.Series<LinearSales, int>> _createSampleData() {
     final data = [
-      new LinearSales(0, 5),
+
       new LinearSales(1, 25),
       new LinearSales(2, 100),
       new LinearSales(3, 75),
+      new LinearSales(4, 50),
+      new LinearSales(5, 250),
+      new LinearSales(6, 100),
+      new LinearSales(7, 7),
+      new LinearSales(8, 35),
+      new LinearSales(9, 2),
+      new LinearSales(10, 190),
+      new LinearSales(11, 75),
+      new LinearSales(12, 15),
     ];
 
-    return [
-      new charts.Series<LinearSales, int>(
+    var series = [
+      charts.Series(
         id: 'Sales',
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (LinearSales sales, _) => sales.year,
+        domainFn: (LinearSales sales, _) => sales.month,
         measureFn: (LinearSales sales, _) => sales.sales,
         data: data,
-      )
+        labelAccessorFn: (LinearSales sales, _) => '${sales.month}',
+      ),
     ];
+    var chart = new charts.LineChart(series, animate: true);
+
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(top: 15.00, bottom: 5.0),
+                child: Text('Transaction History of this year'),
+
+              ),
+
+              Expanded(
+                  child: Container(
+                    //padding: EdgeInsets.all(10.00),
+                    margin: EdgeInsets.only(
+                        top: 10.00, bottom: 10.00, left: 5.00, right: 5.00),
+                    child: chart,
+                  )
+              ),
+            ],
+          ),
+        ),
+      );
   }
 }
 
 /// Sample linear data type.
 class LinearSales {
-  final int year;
+  final int month;
   final int sales;
 
-  LinearSales(this.year, this.sales);
+  LinearSales(this.month, this.sales);
 }

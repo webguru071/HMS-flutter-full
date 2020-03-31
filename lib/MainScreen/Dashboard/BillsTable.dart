@@ -11,7 +11,6 @@ class BillsTableState extends State<BillsTable> {
   int idFlag = 0,nameFlag = 0,amountFlag=0,patientFlag=0;
   TextEditingController controller = new TextEditingController();
   Widget bodyData() => DataTable(
-      onSelectAll: (b) {},
       sortAscending: true,
       columns: <DataColumn>[
         DataColumn(

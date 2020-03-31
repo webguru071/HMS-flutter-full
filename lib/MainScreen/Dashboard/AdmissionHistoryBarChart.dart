@@ -7,25 +7,9 @@ class AdmissionBarChart extends StatefulWidget {
   _AdmissionBarChartState createState() => _AdmissionBarChartState();
 }
 
-class ClicksPerYear {
-  final String year;
-  final int value;
-  final charts.Color color;
 
-  ClicksPerYear(this.year, this.value, Color color)
-      : this.color = charts.Color(
-            r: color.red, g: color.green, b: color.blue, a: color.alpha);
-}
 
 class _AdmissionBarChartState extends State<AdmissionBarChart> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     var data = [
@@ -93,17 +77,16 @@ class _AdmissionBarChartState extends State<AdmissionBarChart> {
           ],
         ),
       ),
-
-   /*
-   floatingActionButton: FloatingActionButton(
-        hoverColor: Colors.red,
-        foregroundColor: Colors.deepPurple,
-        backgroundColor: Colors.yellow,
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
-      */
     );
   }
+}
+
+class ClicksPerYear {
+  final String year;
+  final int value;
+  final charts.Color color;
+
+  ClicksPerYear(this.year, this.value, Color color)
+      : this.color = charts.Color(
+      r: color.red, g: color.green, b: color.blue, a: color.alpha);
 }

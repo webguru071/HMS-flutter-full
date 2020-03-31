@@ -65,10 +65,10 @@ class _DashboardState extends State<Dashboard> {
             child: AdmissionBarChart(),
           ),
           Container(
-            child: SummaryTransactionPieChart(),
+            child: LineChart(),
           ),
           Container(
-            child: LineChart.withSampleData(),
+            child: SummaryTransactionPieChart(),
           ),
           Container(
             child: BillsTable(),
