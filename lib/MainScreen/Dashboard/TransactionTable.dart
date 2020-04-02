@@ -20,7 +20,7 @@ class _TransactionTableState extends State<TransactionTable> {
 
     setState(() {
       for (Map user in responseJson) {
-        _userDetails.add(UserDetails.fromJson(user));
+        _transDetails.add(TransactionDetails.fromJson(user));
       }
     });
   }
@@ -59,14 +59,14 @@ class _TransactionTableState extends State<TransactionTable> {
           Card(
             color:Theme.of(context).cursorColor,
             child: Container(
-              padding: EdgeInsets.all(10),
+              padding: EdgeInsets.only(left:10,top:10,bottom:10),
               child: Row(
                 children: <Widget>[
                  Expanded(
-                   child: Text("First Name"),
+                   child: Text("ID"),
                  ),
                   Expanded(
-                    child: Text("Last Name"),
+                    child: Text("Date"),
                   ),
                   Expanded(
                     child: Text("Invoice"),
@@ -84,17 +84,31 @@ class _TransactionTableState extends State<TransactionTable> {
                     itemCount: _searchResult.length,
                     itemBuilder: (context, i) {
                       return new Card(
-                        child: new ListTile(
-                          title: new Text(_searchResult[i].firstName +
-                              ' ' +
-                              _searchResult[i].lastName),
+                        child: Container(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Text(_transDetails[i].id.toString()),
+                              ),
+                              Expanded(
+                                child: Text(_transDetails[i].date),
+                              ),
+                              Expanded(
+                                child: Text(_transDetails[i].transId),
+                              ),
+                              Expanded(
+                                child: Text(_transDetails[i].amount.toString()),
+                              )
+
+                            ],
+                          ),
                         ),
-                        margin: const EdgeInsets.all(0.0),
                       );
                     },
                   )
                 : new ListView.builder(
-                    itemCount: _userDetails.length,
+                    itemCount: _transDetails.length,
                     itemBuilder: (context, index) {
                       return new Card(
                           child: Container(
@@ -102,16 +116,16 @@ class _TransactionTableState extends State<TransactionTable> {
                             child: Row(
                               children: <Widget>[
                                 Expanded(
-                                  child: Text(_userDetails[index].firstName),
+                                  child: Text(_transDetails[index].id.toString()),
                                 ),
                                 Expanded(
-                                  child: Text(_userDetails[index].lastName),
+                                  child: Text(_transDetails[index].date),
                                 ),
                                 Expanded(
-                                  child: Text('PUR-2020'),
+                                  child: Text(_transDetails[index].transId),
                                 ),
                                 Expanded(
-                                  child: Text("2000.00"),
+                                  child: Text(_transDetails[index].amount.toString()),
                                 )
 
                               ],
@@ -133,36 +147,38 @@ class _TransactionTableState extends State<TransactionTable> {
       return;
     }
 
-    _userDetails.forEach((userDetail) {
-      if (userDetail.firstName.contains(text) || userDetail.lastName.contains(text)) _searchResult.add(userDetail);
+    _transDetails.forEach((transDetail) {
+      if (transDetail.date.contains(text) || transDetail.transId.contains(text)) _searchResult.add(transDetail);
     });
 
     setState(() {});
   }
 }
 
-List<UserDetails> _searchResult = [];
+List<TransactionDetails> _searchResult = [];
 
-List<UserDetails> _userDetails = [];
+List<TransactionDetails> _transDetails = [];
 
-final String url = 'https://jsonplaceholder.typicode.com/users';
+final String url = 'https://nafeewalee.000webhostapp.com/CashFlow/NavCashFlowFragment.php';
 
-class UserDetails {
+class TransactionDetails {
   final int id;
-  final String firstName, lastName, profileUrl;
+  final String date, transId;
+  final double amount;
 
-  UserDetails(
+  TransactionDetails(
       {this.id,
-      this.firstName,
-      this.lastName,
-      this.profileUrl =
-          'https://i.amz.mshcdn.com/3NbrfEiECotKyhcUhgPJHbrL7zM=/950x534/filters:quality(90)/2014%2F06%2F02%2Fc0%2Fzuckheadsho.a33d0.jpg'});
+      this.date,
+      this.transId,
+        this.amount,
+          });
 
-  factory UserDetails.fromJson(Map<String, dynamic> json) {
-    return new UserDetails(
-      id: json['id'],
-      firstName: json['name'],
-      lastName: json['username'],
+  factory TransactionDetails.fromJson(Map<String, dynamic> json) {
+    return new TransactionDetails(
+      id: json['transactions.id'],
+      date: json['transactions.date'],
+      transId: json['transactions.trans_id'],
+      amount : json['transactions.amount'],
     );
   }
 }
