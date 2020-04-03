@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 
-class Admission extends StatefulWidget {
+class Operation extends StatefulWidget {
   @override
-  _AdmissionState createState() => _AdmissionState();
+  _OperationState createState() => _OperationState();
 }
 
-class _AdmissionState extends State<Admission> with SingleTickerProviderStateMixin {
+class _OperationState extends State<Operation> with SingleTickerProviderStateMixin {
 
   List<Widget> containers = [
     Container(
-      color: Colors.yellow,
+      color: Colors.green,
     ),
     Container(
       color: Colors.red,
@@ -37,10 +37,10 @@ class _AdmissionState extends State<Admission> with SingleTickerProviderStateMix
               ),
               tabs: <Widget>[
                 Tab(
-                  text: 'Admited',
+                  text: 'Types',
                 ),
                 Tab(
-                  text: 'Discharged',
+                  text: 'Services',
                 ),
                 Tab(
                   text: 'Voided',

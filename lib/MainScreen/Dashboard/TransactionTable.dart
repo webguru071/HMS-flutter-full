@@ -11,16 +11,19 @@ class TransactionTable extends StatefulWidget {
 }
 
 class _TransactionTableState extends State<TransactionTable> {
+  int idFlag = 0,dateFlag = 0,amountFlag=0,transFlag=0;
   TextEditingController controller = new TextEditingController();
 
   // Get json result and convert it to model. Then add
-  Future<Null> getUserDetails() async {
+  Future<Null> getFutureTransDetails() async {
+    print('hello');
     final response = await http.get(url);
     final responseJson = json.decode(response.body);
 
     setState(() {
       for (Map user in responseJson) {
         _transDetails.add(TransactionDetails.fromJson(user));
+
       }
     });
   }
@@ -29,7 +32,7 @@ class _TransactionTableState extends State<TransactionTable> {
   void initState() {
     super.initState();
 
-    getUserDetails();
+    getFutureTransDetails();
   }
 
   @override
@@ -57,22 +60,86 @@ class _TransactionTableState extends State<TransactionTable> {
             ),
           ),
           Card(
-            color:Theme.of(context).cursorColor,
+            color: Theme.of(context).cursorColor,
             child: Container(
-              padding: EdgeInsets.only(left:10,top:10,bottom:10),
+              padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
               child: Row(
                 children: <Widget>[
-                 Expanded(
-                   child: Text("ID"),
-                 ),
+
                   Expanded(
-                    child: Text("Date"),
+                    flex: 1,
+                    child:  new GestureDetector(
+                      onTap: () {
+                        setState(() { if(idFlag==0){
+                          _transDetails.sort((a, b) => a.id.compareTo(b.id));
+                          idFlag=1;
+                        }
+                        else{
+                          _transDetails.sort((b, a) => a.id.compareTo(b.id));
+                          idFlag=0;
+                        }
+                        });
+
+                      },
+                        child: new Text("ID"),
+
+                    ),
+                  ),
+              Expanded(
+                flex: 2,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() { if(dateFlag==0){
+                      _transDetails.sort((a, b) => a.date.compareTo(b.date));
+                      dateFlag=1;
+                    }
+                    else{
+                      _transDetails.sort((b, a) => a.date.compareTo(b.date));
+                      dateFlag=0;
+                    }
+                    });
+
+                  },
+                  child: Text("Date"),
+                ),
+              ),
+
+
+                  Expanded(
+                    flex: 2,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() { if(transFlag==0){
+                          _transDetails.sort((a, b) => a.transId.compareTo(b.transId));
+                          transFlag=1;
+                        }
+                        else{
+                          _transDetails.sort((b, a) => a.transId.compareTo(b.transId));
+                          transFlag=0;
+                        }
+                        });
+
+                      },
+                      child: Text("Invoice"),
+                    ),
                   ),
                   Expanded(
-                    child: Text("Invoice"),
-                  ),
-                  Expanded(
-                    child: Text("Amount"),
+                    flex: 2,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() { if(amountFlag==0){
+                          _transDetails.sort((a, b) => a.amount.compareTo(b.amount));
+                          amountFlag=1;
+                        }
+                        else{
+                          _transDetails.sort((b, a) => a.amount.compareTo(b.amount));
+                          amountFlag=0;
+                        }
+                        });
+
+                      },
+                      child: Text("Amount"),
+                    ),
                   ),
                 ],
               ),
@@ -85,22 +152,26 @@ class _TransactionTableState extends State<TransactionTable> {
                     itemBuilder: (context, i) {
                       return new Card(
                         child: Container(
-                          padding: EdgeInsets.only(left: 10),
+                          padding:
+                              EdgeInsets.only(left: 10, top: 10, bottom: 10),
                           child: Row(
                             children: <Widget>[
                               Expanded(
+                                flex: 1,
                                 child: Text(_transDetails[i].id.toString()),
                               ),
                               Expanded(
+                                flex: 2,
                                 child: Text(_transDetails[i].date),
                               ),
                               Expanded(
+                                flex: 2,
                                 child: Text(_transDetails[i].transId),
                               ),
                               Expanded(
-                                child: Text(_transDetails[i].amount.toString()),
+                                flex: 2,
+                                child: Text(_transDetails[i].amount),
                               )
-
                             ],
                           ),
                         ),
@@ -108,29 +179,35 @@ class _TransactionTableState extends State<TransactionTable> {
                     },
                   )
                 : new ListView.builder(
+              shrinkWrap: true,
                     itemCount: _transDetails.length,
                     itemBuilder: (context, index) {
+                      var f = _transDetails[index];
                       return new Card(
-                          child: Container(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Text(_transDetails[index].id.toString()),
-                                ),
-                                Expanded(
-                                  child: Text(_transDetails[index].date),
-                                ),
-                                Expanded(
-                                  child: Text(_transDetails[index].transId),
-                                ),
-                                Expanded(
-                                  child: Text(_transDetails[index].amount.toString()),
-                                )
-
-                              ],
-                            ),
+                        child: Container(
+                          padding:
+                              EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 1,
+                                child: Text(f.id.toString()),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text(f.date),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text(f.transId),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Text(f.amount),
+                              )
+                            ],
                           ),
+                        ),
                       );
                     },
                   ),
@@ -148,9 +225,10 @@ class _TransactionTableState extends State<TransactionTable> {
     }
 
     _transDetails.forEach((transDetail) {
-      if (transDetail.date.contains(text) || transDetail.transId.contains(text)) _searchResult.add(transDetail);
+      if (transDetail.amount.contains(text.toLowerCase()) ||
+          transDetail.amount.toLowerCase().contains(text.toUpperCase()))
+        _searchResult.add(transDetail);
     });
-
     setState(() {});
   }
 }
@@ -159,26 +237,27 @@ List<TransactionDetails> _searchResult = [];
 
 List<TransactionDetails> _transDetails = [];
 
-final String url = 'https://nafeewalee.000webhostapp.com/CashFlow/NavCashFlowFragment.php';
+final String url =
+    'https://nafeewalee.000webhostapp.com/CashFlow/NavCashFlowFragment.php';
 
 class TransactionDetails {
   final int id;
   final String date, transId;
-  final double amount;
+  final String amount;
 
-  TransactionDetails(
-      {this.id,
-      this.date,
-      this.transId,
-        this.amount,
-          });
+  TransactionDetails({
+    this.id,
+    this.date,
+    this.transId,
+    this.amount,
+  });
 
   factory TransactionDetails.fromJson(Map<String, dynamic> json) {
     return new TransactionDetails(
       id: json['transactions.id'],
       date: json['transactions.date'],
       transId: json['transactions.trans_id'],
-      amount : json['transactions.amount'],
+      amount: json['transactions.amount'],
     );
   }
 }

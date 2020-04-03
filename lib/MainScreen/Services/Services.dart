@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 
 
-class Admission extends StatefulWidget {
+class Services extends StatefulWidget {
   @override
-  _AdmissionState createState() => _AdmissionState();
+  _ServicesState createState() => _ServicesState();
 }
 
-class _AdmissionState extends State<Admission> with SingleTickerProviderStateMixin {
+class _ServicesState extends State<Services> with SingleTickerProviderStateMixin {
 
   List<Widget> containers = [
-    Container(
-      color: Colors.yellow,
-    ),
     Container(
       color: Colors.red,
     ),
@@ -23,7 +20,7 @@ class _AdmissionState extends State<Admission> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: Size(double.infinity, 55), // 44 is the height
@@ -37,13 +34,10 @@ class _AdmissionState extends State<Admission> with SingleTickerProviderStateMix
               ),
               tabs: <Widget>[
                 Tab(
-                  text: 'Admited',
+                  text: 'Category',
                 ),
                 Tab(
-                  text: 'Discharged',
-                ),
-                Tab(
-                  text: 'Voided',
+                  text: 'Service',
                 ),
               ],
             ),
