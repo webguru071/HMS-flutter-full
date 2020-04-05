@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 
-class Account extends StatefulWidget {
+class Accounts extends StatefulWidget {
   @override
-  _AccountState createState() => _AccountState();
+  _AccountsState createState() => _AccountsState();
 }
 
-class _AccountState extends State<Account> with SingleTickerProviderStateMixin {
+class _AccountsState extends State<Accounts> with SingleTickerProviderStateMixin {
 
   List<Widget> containers = [
     Container(

@@ -1,182 +1,239 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterhms/LoginScreen/LoginScreen.dart';
-import 'package:flutterhms/SplashScreen/Typo.dart';
-
+import 'package:flutterhms/MainScreen/Animator.dart';
+import 'package:flutterhms/MainScreen/Beds/Beds.dart';
+import 'package:flutterhms/MainScreen/Expense/Expense.dart';
+import 'Accounts/Accounts.dart';
 import 'Admission/Admission.dart';
 import 'Dashboard/DashboardScreen.dart';
+import 'DoctorsDepartment/DoctorsDepartment.dart';
 import 'Emergency/Emergency.dart';
+import 'Operation/Operation.dart';
+import 'Patient/Patient.dart';
+import 'ReferralCategory/ReferralCategory.dart';
+import 'Reports/Reports.dart';
+import 'Services/Services.dart';
 
 class MainScreen extends StatefulWidget {
+/*  MainScreen({this.username});
+
+  final String username;
+  String getValue(){
+    return username;
+  }*/
+
   @override
   _MainScreenState createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
+
+  String user = '';
   String _title = 'Dashboard';
-  int selectedDrawerParent = 0;
-  int selectedDrawerNavigableChild = 0;
+  PageController _pageController;
+  int _page = 0;
 
-  getDrawerItemWidget(int pos) {
-    switch (pos) {
-      case 0:
-        //_title = 'Dashboard';
-        return new Dashboard();
-      case 1:
-        //_title = 'Report';
-        return new Emergency();
-      case 2:
-        //_title = 'Report';
-        return new Admission();
 
-      default:
-        return new Box();
-    }
-  }
+  List drawerItems = [
+    {
+      "icon": Icons.dashboard,
+      "name": "Dashboard",
+    },
+    {
+      "icon": Icons.event_busy,
+      "name": "Emergency",
+    },
+    {
+      "icon": Icons.games,
+      "name": "Admission",
+    },
+    {
+      "icon": Icons.memory,
+      "name": "Operation",
+    },
+    {
+      "icon": Icons.delete,
+      "name": "Beds",
+    },
+    {
+      "icon": Icons.add,
+      "name": "Services",
+    },
+    {
+      "icon": Icons.departure_board,
+      "name": "Department",
+    },
+    {
+      "icon": Icons.local_hospital,
+      "name": "Patients",
+    },
+    {
+      "icon": Icons.report_problem,
+      "name": "Report",
+    },
+    {
+      "icon": Icons.receipt,
+      "name": "Reference Category",
+    },
+    {
+      "icon": Icons.supervisor_account,
+      "name": "Accounts",
+    },
+    {
+      "icon": Icons.casino,
+      "name": "Expense",
+    },
+  ];
 
-  onSelectItem(int index, String title) {
+  onSelectItem(String title) {
     setState(() {
       this._title = title;
-      selectedDrawerNavigableChild = index;
     });
-    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size(double.infinity, 50), // 44 is the height
-          child: AppBar(
-            flexibleSpace: Container(
+      appBar: PreferredSize(
+        preferredSize: Size(double.infinity, 50), // 44 is the height
+        child: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: <Color>[Color(0xFF2247CA), Colors.blue],
+              ),
+            ),
+          ),
+          iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
+          // backgroundColor: Color(0xFF2247CA),
+          /* leading: IconButton(
+            icon: Icon(FontAwesomeIcons.bars,
+              color: Colors.white,
+            ),
+            onPressed: (){
+
+            },
+          ),*/
+          actions: <Widget>[
+            PopupMenuButton<String>(
+              icon: Icon(
+                Icons.settings,
+                color: Colors.white,
+              ),
+              onSelected: choiceAction,
+              itemBuilder: (BuildContext context) {
+                return Constants.choices.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
+            )
+          ],
+          title: new Text(
+            this._title,
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+      drawer: Drawer(
+        //key: Key('builder ${selectedDrawerParent.toString()}'),
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              margin: EdgeInsets.zero,
+              accountEmail: Text("naw.andit@gmail.com"),
+              accountName: Text("Nafee Walee"),
+              currentAccountPicture: GestureDetector(
+                child: CircleAvatar(
+                  backgroundImage: AssetImage("assets/images/profile_pic.png"),
+                ),
+                onTap: () => print("This is your current account."),
+              ),
+              otherAccountsPictures: <Widget>[
+                GestureDetector(
+                    child: CircleAvatar(
+                      backgroundImage: AssetImage(
+                          "assets/images/default_profile_picture2.jpg"),
+                    ),
+                    onTap: () {
+                      print("This is your other account.");
+                    }),
+              ],
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: <Color>[Color(0xFF2247CA), Colors.blue],
-                ),
-              ),
+                  image: DecorationImage(
+                      image: AssetImage(
+                          "assets/images/default_profile_banner.png"),
+                      fit: BoxFit.fill)),
             ),
-           // backgroundColor: Color(0xFF2247CA),
-            actions: <Widget>[
-              PopupMenuButton<String>(
-                icon: Icon(
-                  Icons.settings,
-                  color: Colors.white,
-                ),
-                onSelected: choiceAction,
-                itemBuilder: (BuildContext context) {
-                  return Constants.choices.map((String choice) {
-                    return PopupMenuItem<String>(
-                      value: choice,
-                      child: Text(choice),
-                    );
-                  }).toList();
-                },
-              )
-            ],
-            title: new Text(
-              this._title,
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-        drawer: Drawer(
-          //key: Key('builder ${selectedDrawerParent.toString()}'),
-          // Add a ListView to the drawer. This ensures the user can scroll
-          // through the options in the drawer if there isn't enough vertical
-          // space to fit everything.
-          child: ListView(
-            // Important: Remove any padding from the ListView.
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              UserAccountsDrawerHeader(
-                accountEmail: new Text("naw.andit@gmail.com"),
-                accountName: new Text("Nafee Walee"),
-                currentAccountPicture: new GestureDetector(
-                  child: new CircleAvatar(
-                    backgroundImage:
-                        AssetImage("assets/images/profile_pic.png"),
-                  ),
-                  onTap: () => print("This is your current account."),
-                ),
-                otherAccountsPictures: <Widget>[
-                  new GestureDetector(
-                      child: new CircleAvatar(
-                        backgroundImage: AssetImage(
-                            "assets/images/default_profile_picture2.jpg"),
+
+            ListView.builder(
+              padding: new EdgeInsets.all(0.0),
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: drawerItems.length,
+              itemBuilder: (BuildContext context, int index) {
+                Map item = drawerItems[index];
+                return WidgetListAnimator(
+                  ListTile(
+                    leading: Icon(
+                      item['icon'],
+                      color: _page == index
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).textTheme.title.color,
+                    ),
+                    title: Text(
+                      item['name'],
+                      style: TextStyle(
+                        color: _page == index
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).textTheme.title.color,
                       ),
-                      onTap: () {
-                        print("This is your other account.");
-                      }),
-                ],
-                decoration: new BoxDecoration(
-                    image: new DecorationImage(
-                        image: new AssetImage(
-                            "assets/images/default_profile_banner.png"),
-                        fit: BoxFit.fill)),
-              ),
-              ListTile(
-                //leading: Image.asset('assets/images/dashboard_icon.png'),
-                leading: Icon(Icons.dashboard),
-                title: Text('Dashboard'),
-                //selected: 0 == selectedDrawerNavigableChild,
-                onTap: () => onSelectItem(0, 'Dashboard'),
-              ),
-              ListTile(
-                leading: Icon(Icons.event_busy),
-                title: Text('Emergency'),
-                onTap: () => onSelectItem(1, 'Emergency'),
-              ),
-              ListTile(
-                leading: Icon(Icons.insert_invitation),
-                title: Text('Admission'),
-                onTap: () => onSelectItem(2, 'Admission'),
-              ),
-              ListTile(
-                leading: Icon(Icons.book),
-                title: Text('Beds'),
-                onTap: () => onSelectItem(1, 'Beds'),
-              ),
-              ListTile(
-                leading: Icon(Icons.games),
-                title: Text('Services'),
-                onTap: () => onSelectItem(1, 'Beds'),
-              ),
-              ListTile(
-                leading: Icon(Icons.departure_board),
-                title: Text('Doctors Department'),
-                onTap: () => onSelectItem(1, 'Beds'),
-              ),
-              ListTile(
-                leading: Icon(Icons.local_hospital),
-                title: Text('Patients'),
-                onTap: () => onSelectItem(1, 'Beds'),
-              ),
-              ListTile(
-                leading: Icon(Icons.report_problem),
-                title: Text('Report'),
-                onTap: () => onSelectItem(1, 'Beds'),
-              ),
-              ListTile(
-                leading: Icon(Icons.receipt),
-                title: Text('Reference Category'),
-                onTap: () => onSelectItem(1, 'Beds'),
-              ),
-              ListTile(
-                leading: Icon(Icons.supervisor_account),
-                title: Text('Accounts'),
-                onTap: () => onSelectItem(1, 'Beds'),
-              ),
-              ListTile(
-                leading: Icon(Icons.casino),
-                title: Text('Expense'),
-                onTap: () => onSelectItem(1, 'Beds'),
-              ),
-            ],
-          ),
+                    ),
+                    onTap: () {
+                      _pageController.jumpToPage(index);
+                      onSelectItem(item['name']);
+                      Navigator.pop(context);
+                    },
+                  ),
+                );
+              },
+            ),
+          ],
         ),
-        body: getDrawerItemWidget(selectedDrawerNavigableChild));
+      ),
+      body: PageView(
+        physics: NeverScrollableScrollPhysics(),
+        controller: _pageController,
+        onPageChanged: onPageChanged,
+        children: <Widget>[
+          Dashboard(),
+          Emergency(),
+          Admission(),
+          Operation(),
+          Beds(),
+          Services(),
+          DoctorsDepartment(),
+          Patient(),
+          Reports(),
+          ReferralCategory(),
+          Accounts(),
+          Expense(),
+          //Page2(),
+        ],
+      ),
+    );
   }
 
   void choiceAction(String choice) {
@@ -197,7 +254,13 @@ class _MainScreenState extends State<MainScreen> {
           title: new Text("Sign Out"),
           content: new Text("Do you wish to log out?"),
           actions: <Widget>[
-            new FlatButton(
+            FlatButton(
+              child: new Text("Stay"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
               child: new Text("Logout"),
               onPressed: () {
                 Navigator.pushReplacement(
@@ -209,16 +272,32 @@ class _MainScreenState extends State<MainScreen> {
                         transitionDuration: Duration(milliseconds: 500)));
               },
             ),
-            new FlatButton(
-              child: new Text("Stay"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
           ],
         );
       },
     );
+  }
+
+  void navigationTapped(int page) {
+    _pageController.jumpToPage(page);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: 0);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
+
+  void onPageChanged(int page) {
+    setState(() {
+      _page = page;
+    });
   }
 }
 
@@ -228,3 +307,4 @@ class Constants {
 
   static const List<String> choices = <String>[Settings, SignOut];
 }
+

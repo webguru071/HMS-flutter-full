@@ -1,6 +1,9 @@
+import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterhms/MainScreen/MainScreen.dart';
+import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -9,6 +12,12 @@ class LoginScreen extends StatefulWidget {
 
 class LoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
+  TextEditingController email=new TextEditingController();
+  TextEditingController pass=new TextEditingController();
+  bool _validate = false;
+
+  String msg='';
+  String username='';
   bool _rememberMe = false;
   Animation<double> _iconAnimation,_iconAnimation2;
   AnimationController _iconAnimationController,_iconAnimationController2;
@@ -25,6 +34,65 @@ class LoginScreenState extends State<LoginScreen>
     _iconAnimationController.forward();
     _iconAnimationController2.forward();
   }
+  @override
+  void dispose() {
+    super.dispose();
+    email.dispose();
+    pass.dispose();
+  }
+  Future<List> _login() async {
+    final response = await http.post("https://nafeewalee.000webhostapp.com/flutter_connection/login.php", body: {
+      "email": email.text,
+      "password": pass.text,},
+    );
+
+    var datauser = json.decode(response.body);
+
+
+    //print("data: $datauser");
+    if(datauser.length==0){
+      setState(() {
+        msg="Login Fail";
+      });
+    }else{
+      setState(() {
+        username= datauser[0]['name'];
+      });
+
+      if(datauser[0]['name']=='Admin'){
+
+        msg="";
+        Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+                pageBuilder: (c, a1, a2) => MainScreen(),
+                transitionsBuilder: (c, anim, a2, child) =>
+                    FadeTransition(opacity: anim, child: child),
+                transitionDuration: Duration(milliseconds: 600)));
+      }else if(datauser[0]['name']=='Pharmacy') {
+        msg = "";
+        Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+                pageBuilder: (c, a1, a2) => MainScreen(),
+                transitionsBuilder: (c, anim, a2, child) =>
+                    FadeTransition(opacity: anim, child: child),
+                transitionDuration: Duration(milliseconds: 600)));
+      }
+      print(username);
+    }
+
+    return datauser;
+  }
+  void _staticLogin(){
+    Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+            pageBuilder: (c, a1, a2) => MainScreen(),
+            transitionsBuilder: (c, anim, a2, child) =>
+                FadeTransition(opacity: anim, child: child),
+            transitionDuration: Duration(milliseconds: 600)));
+  }
 
   Widget _buildEmailTF() {
     return Column(
@@ -36,17 +104,20 @@ class LoginScreenState extends State<LoginScreen>
         ),
         SizedBox(height: 10.0),
         Container(
-              alignment: Alignment.centerLeft,
-              decoration: kBoxDecorationStyle,
-              height:  _iconAnimation.value * 60.0,
-              child: TextField(
-                keyboardType: TextInputType.emailAddress,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'OpenSans',
-                ),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
+          alignment: Alignment.centerLeft,
+          decoration: kBoxDecorationStyle,
+          height:  _iconAnimation.value * 60.0,
+          child: TextField(
+            controller: email,
+
+            keyboardType: TextInputType.emailAddress,
+            style: TextStyle(
+              color: Colors.black,
+              fontFamily: 'OpenSans',
+            ),
+            decoration: InputDecoration(
+              // errorText: _validate ? 'Value Can\'t Be Empty' : null,
+              border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
                 Icons.email,
@@ -75,12 +146,14 @@ class LoginScreenState extends State<LoginScreen>
           decoration: kBoxDecorationStyle,
           height:  _iconAnimation.value * 60.0,
           child: TextField(
+            controller: pass,
             obscureText: true,
             style: TextStyle(
               color: Colors.black,
               fontFamily: 'OpenSans',
             ),
             decoration: InputDecoration(
+              //: _validate ? 'Value Can\'t Be Empty' : null,
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: 14.0),
               prefixIcon: Icon(
@@ -145,14 +218,17 @@ class LoginScreenState extends State<LoginScreen>
       child: RaisedButton(
         elevation: 25.0,
         onPressed: () {
-          Navigator.pushReplacement(
-              context,
-              PageRouteBuilder(
-                  pageBuilder: (c, a1, a2) => MainScreen(),
-                  transitionsBuilder: (c, anim, a2, child) =>
-                      FadeTransition(opacity: anim, child: child),
-                  transitionDuration: Duration(milliseconds: 600)));
-          _iconAnimationController.dispose();
+          _staticLogin();
+          if(email.text.isEmpty || pass.text.isEmpty){
+            _validate = false;
+          }
+          else{
+            _validate = true;
+            print(_validate);
+            //_login();
+          }
+
+          //_login();
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
@@ -175,7 +251,9 @@ class LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.light,
         child: GestureDetector(
@@ -213,7 +291,7 @@ class LoginScreenState extends State<LoginScreen>
                     children: <Widget>[
                       Text(
                         'Sign In',
-                         style: TextStyle(
+                        style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'OpenSans',
                           fontSize: _iconAnimation2.value * 30.0,
@@ -263,3 +341,5 @@ final kBoxDecorationStyle = BoxDecoration(
     ),
   ],
 );
+
+
