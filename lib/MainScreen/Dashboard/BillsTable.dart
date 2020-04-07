@@ -204,7 +204,7 @@ var names = <Name>[
   Name(id: 0 , name: "Jedi",amount: 5.00, patient: "Corona"),
   Name(id: 1 , name: "Sith",amount: 15.00, patient: "Corona"),
   Name(id: 2 , name: "Order",amount: 25.00, patient: "Corona"),
-  Name(id: 3 , name: "Chaos",amount: 55.00, patient: "Corona"),
+  Name(id: 3 , name: "Chaos",amount: 550.00, patient: "Corona"),
   Name(id: 4 , name: "Light",amount: 35.00, patient: "Corona"),
   Name(id: 5 , name: "Dark",amount: 95.00, patient: "Corona"),
 ];
