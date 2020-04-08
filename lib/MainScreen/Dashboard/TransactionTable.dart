@@ -50,7 +50,7 @@ class _TransactionTableState extends State<TransactionTable> {
                   onChanged: onSearchTextChanged,
                 ),
                 trailing: new IconButton(
-                  icon: new Icon(Icons.search),
+                  icon: new Icon(Icons.close),
                   onPressed: () {
                     controller.clear();
                     onSearchTextChanged('');
@@ -90,17 +90,17 @@ class _TransactionTableState extends State<TransactionTable> {
                 child: GestureDetector(
                   onTap: () {
                     setState(() { if(dateFlag==0){
-                      _transDetails.sort((a, b) => a.date.compareTo(b.date));
+                      _transDetails.sort((a, b) => a.transType.compareTo(b.transType));
                       dateFlag=1;
                     }
                     else{
-                      _transDetails.sort((b, a) => a.date.compareTo(b.date));
+                      _transDetails.sort((b, a) => a.transType.compareTo(b.transType));
                       dateFlag=0;
                     }
                     });
 
                   },
-                  child: Text("Date"),
+                  child: Text("TransID"),
                 ),
               ),
 
@@ -120,7 +120,7 @@ class _TransactionTableState extends State<TransactionTable> {
                         });
 
                       },
-                      child: Text("Invoice"),
+                      child: Text("TransType"),
                     ),
                   ),
                   Expanded(
@@ -162,16 +162,17 @@ class _TransactionTableState extends State<TransactionTable> {
                               ),
                               Expanded(
                                 flex: 2,
-                                child: Text(_transDetails[i].date),
-                              ),
-                              Expanded(
-                                flex: 2,
                                 child: Text(_transDetails[i].transId),
                               ),
                               Expanded(
                                 flex: 2,
+                                child: Text(_transDetails[i].transType),
+                              ),
+                              Expanded(
+                                flex: 2,
                                 child: Text(_transDetails[i].amount),
-                              )
+                              ),
+
                             ],
                           ),
                         ),
@@ -195,16 +196,17 @@ class _TransactionTableState extends State<TransactionTable> {
                               ),
                               Expanded(
                                 flex: 2,
-                                child: Text(f.date),
-                              ),
-                              Expanded(
-                                flex: 2,
                                 child: Text(f.transId),
                               ),
                               Expanded(
                                 flex: 2,
+                                child: Text(f.transType),
+                              ),
+                              Expanded(
+                                flex: 2,
                                 child: Text(f.amount),
-                              )
+                              ),
+
                             ],
                           ),
                         ),
@@ -225,8 +227,8 @@ class _TransactionTableState extends State<TransactionTable> {
     }
 
     _transDetails.forEach((transDetail) {
-      if (transDetail.amount.contains(text.toLowerCase()) ||
-          transDetail.amount.toLowerCase().contains(text.toUpperCase()))
+      if (transDetail.transType.contains(text.toLowerCase()) ||
+          transDetail.transType.toLowerCase().contains(text.toUpperCase()))
         _searchResult.add(transDetail);
     });
     setState(() {});
@@ -238,26 +240,28 @@ List<TransactionDetails> _searchResult = [];
 List<TransactionDetails> _transDetails = [];
 
 final String url =
-    'https://nafeewalee.000webhostapp.com/CashFlow/NavCashFlowFragment.php';
+    'https://nafeewalee.000webhostapp.com/flutter_connection/Dashboard/transaction.php';
 
 class TransactionDetails {
   final int id;
-  final String date, transId;
+  final String transType, transId,description;
   final String amount;
 
   TransactionDetails({
     this.id,
-    this.date,
     this.transId,
+    this.transType,
     this.amount,
+    this.description,
   });
 
   factory TransactionDetails.fromJson(Map<String, dynamic> json) {
     return new TransactionDetails(
-      id: json['transactions.id'],
-      date: json['transactions.date'],
-      transId: json['transactions.trans_id'],
-      amount: json['transactions.amount'],
+      id: json['id'],
+      transId: json['trans_id'],
+      transType: json['transaction_type'],
+      amount: json['amount'],
+      description: json['description']
     );
   }
 }

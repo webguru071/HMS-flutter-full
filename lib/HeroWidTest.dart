@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 
-import 'package:flutterhms/MainScreen/Dashboard/AdmissionHistoryBarChart.dart';
-import 'package:flutterhms/MainScreen/Dashboard/BillsTable.dart';
-import 'package:flutterhms/MainScreen/Dashboard/TransactionTable.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:flutterhms/MainScreen/Dashboard/PieChart.dart';
-import 'package:flutterhms/MainScreen/Dashboard/LineChart.dart';
+import 'MainScreen/Dashboard/AdmissionHistoryBarChart.dart';
+import 'MainScreen/Dashboard/BillsTable.dart';
+import 'MainScreen/Dashboard/LineChart.dart';
+import 'MainScreen/Dashboard/SummaryDetails.dart';
+import 'MainScreen/Dashboard/TransactionTable.dart';
 
-import 'SummaryDetails.dart';
 
-class Dashboard extends StatefulWidget {
+class MyHomePage extends StatefulWidget {
 
   @override
-  _DashboardState createState() => _DashboardState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
 class DashboardItems {
@@ -24,17 +22,17 @@ class DashboardItems {
   DashboardItems(this.img, this.title, this.Class);
 }
 
-class _DashboardState extends State<Dashboard> {
+class _MyHomePageState extends State<MyHomePage> {
   List<DashboardItems> items = new List<DashboardItems>();
 
-  _DashboardState() {
+  _MyHomePageState() {
     items.add(new DashboardItems("assets/images/apple.png", "Summary",SummaryPage()));
     items.add(new DashboardItems("assets/images/apple.png", "Admission",AdmissionBarChart()));
-    items.add(new DashboardItems("assets/images/android.png", "Pie",SummaryTransactionPieChart()));
+    items.add(new DashboardItems("assets/images/android.png", "Pie",PieChart()));
     items.add(new DashboardItems("assets/images/android.png", "Line",LineChart()));
     items.add(new DashboardItems("assets/images/apple.png", "Bills",BillsTable()));
     items.add(new DashboardItems("assets/images/android.png", "Transaction",TransactionTable()));
-  }
+}
 
   Widget SuperHeroCell(BuildContext ctx, int index) {
     return GestureDetector(
@@ -58,7 +56,7 @@ class _DashboardState extends State<Dashboard> {
                     Hero(
                       tag: items[index],
                       child: Image.asset(items[index].img,
-                          width:100),
+                      width:100),
                     ),
                     SizedBox(
                       width: 16,
@@ -116,34 +114,15 @@ class _MyDetailPageState extends State<MyDetailPage> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size(double.infinity, 50), // 44 is the height
-        child: AppBar(
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[Color(0xFF2247CA), Colors.blue],
-              ),
-            ),
-          ),
-          iconTheme: IconThemeData(
-            color: Colors.white,
-          ),
-          title: new Text(superHero.title,style: TextStyle(color: Colors.white)
-        ),
-      ),
-    ),
       body: Center(
-        child:Hero(
-          transitionOnUserGestures: true,
-          tag: superHero,
-          child: Transform.scale(
-            scale: 1,
-            child: superHero.Class,
-          ),
-        ),
-      ),
+          child:Hero(
+                transitionOnUserGestures: true,
+                tag: superHero,
+                child: Transform.scale(
+                  scale: 1,
+                  child: superHero.Class,
+                ),
+              ),
+    ),
     );
-  }}
+}}

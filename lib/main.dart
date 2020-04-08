@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutterhms/MainScreen/MainScreen.dart';
 import 'package:flutterhms/SplashScreen/SplashScreen.dart';
 
 void main() => runApp(InitApplication());
@@ -15,7 +16,7 @@ class InitApplication extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: SplashScreen(),
+      home: MainScreen(),
     );
   }
 }
