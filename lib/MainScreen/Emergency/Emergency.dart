@@ -156,7 +156,7 @@ class _EmergencyTableState extends State<EmergencyTable> {
                         });
 
                       },
-                      child: Text("Date"),
+                      child: Text("Patient Name"),
                     ),
                   ),
 
@@ -194,7 +194,7 @@ class _EmergencyTableState extends State<EmergencyTable> {
                         });
 
                       },
-                      child: Text("Amount"),
+                      child: Text("Paid Amount"),
                     ),
                   ),
                 ],

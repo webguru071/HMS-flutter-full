@@ -362,16 +362,16 @@ void _showDialog(BuildContext context, index) {
     builder: (BuildContext context) {
       // return object of type Dialog
       return AlertDialog(
-        title: new Text(_transDetails[index].id.toString()),
-        content: new Text("Do you wish to log out?"),
+        title: new Text(_transDetails[index].transId.toString()),
+        content: Column(
+          children: <Widget>[
+            Text("Description:"),
+            Text(_transDetails[index].description.toString()),
+          ],
+        ),
         actions: <Widget>[
           new FlatButton(
-            child: new Text("Logout"),
-            onPressed: () {
-            },
-          ),
-          new FlatButton(
-            child: new Text("Stay"),
+            child: new Text("Close"),
             onPressed: () {
               Navigator.of(context).pop();
             },

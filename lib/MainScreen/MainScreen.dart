@@ -29,6 +29,28 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
 
+  Future<bool> _onBackPressed() {
+    return showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Are you sure?'),
+        content: new Text('Do you want to exit an App'),
+        actions: <Widget>[
+          new GestureDetector(
+            onTap: () => Navigator.of(context).pop(false),
+            child: Text("NO"),
+          ),
+          SizedBox(height: 16),
+          new GestureDetector(
+            onTap: () => Navigator.of(context).pop(true),
+            child: Text("YES"),
+          ),
+        ],
+      ),
+    ) ??
+        false;
+  }
+
   String user = '';
   String _title = 'Dashboard';
   PageController _pageController;
@@ -94,144 +116,147 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size(double.infinity, 50), // 44 is the height
-        child: AppBar(
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: <Color>[Color(0xFF2247CA), Colors.blue],
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size(double.infinity, 50), // 44 is the height
+          child: AppBar(
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[Color(0xFF2247CA), Colors.blue],
+                ),
               ),
             ),
-          ),
-          iconTheme: IconThemeData(
-            color: Colors.white,
-          ),
-          // backgroundColor: Color(0xFF2247CA),
-          /* leading: IconButton(
-            icon: Icon(FontAwesomeIcons.bars,
+            iconTheme: IconThemeData(
               color: Colors.white,
             ),
-            onPressed: (){
-
-            },
-          ),*/
-          actions: <Widget>[
-            PopupMenuButton<String>(
-              icon: Icon(
-                Icons.settings,
+            // backgroundColor: Color(0xFF2247CA),
+            /* leading: IconButton(
+              icon: Icon(FontAwesomeIcons.bars,
                 color: Colors.white,
               ),
-              onSelected: choiceAction,
-              itemBuilder: (BuildContext context) {
-                return Constants.choices.map((String choice) {
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
+              onPressed: (){
+
               },
-            )
-          ],
-          title: new Text(
-            this._title,
-            style: TextStyle(color: Colors.white),
+            ),*/
+            actions: <Widget>[
+              PopupMenuButton<String>(
+                icon: Icon(
+                  Icons.settings,
+                  color: Colors.white,
+                ),
+                onSelected: choiceAction,
+                itemBuilder: (BuildContext context) {
+                  return Constants.choices.map((String choice) {
+                    return PopupMenuItem<String>(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                },
+              )
+            ],
+            title: new Text(
+              this._title,
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ),
-      ),
-      drawer: Drawer(
-        //key: Key('builder ${selectedDrawerParent.toString()}'),
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the drawer if there isn't enough vertical
-        // space to fit everything.
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              margin: EdgeInsets.zero,
-              accountEmail: Text("naw.andit@gmail.com"),
-              accountName: Text("Nafee Walee"),
-              currentAccountPicture: GestureDetector(
-                child: CircleAvatar(
-                  backgroundImage: AssetImage("assets/images/profile_pic.png"),
+        drawer: Drawer(
+          //key: Key('builder ${selectedDrawerParent.toString()}'),
+          // Add a ListView to the drawer. This ensures the user can scroll
+          // through the options in the drawer if there isn't enough vertical
+          // space to fit everything.
+          child: ListView(
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              UserAccountsDrawerHeader(
+                margin: EdgeInsets.zero,
+                accountEmail: Text("naw.andit@gmail.com"),
+                accountName: Text("Nafee Walee"),
+                currentAccountPicture: GestureDetector(
+                  child: CircleAvatar(
+                    backgroundImage: AssetImage("assets/images/profile_pic.png"),
+                  ),
+                  onTap: () => print("This is your current account."),
                 ),
-                onTap: () => print("This is your current account."),
+                /*otherAccountsPictures: <Widget>[
+                  GestureDetector(
+                      child: CircleAvatar(
+                        backgroundImage: AssetImage(
+                            "assets/images/default_profile_picture2.jpg"),
+                      ),
+                      onTap: () {
+                        print("This is your other account.");
+                      }),
+                ],*/
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(
+                            "assets/images/default_profile_banner.png"),
+                        fit: BoxFit.fill)),
               ),
-              otherAccountsPictures: <Widget>[
-                GestureDetector(
-                    child: CircleAvatar(
-                      backgroundImage: AssetImage(
-                          "assets/images/default_profile_picture2.jpg"),
-                    ),
-                    onTap: () {
-                      print("This is your other account.");
-                    }),
-              ],
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(
-                          "assets/images/default_profile_banner.png"),
-                      fit: BoxFit.fill)),
-            ),
 
-            ListView.builder(
-              padding: new EdgeInsets.all(0.0),
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: drawerItems.length,
-              itemBuilder: (BuildContext context, int index) {
-                Map item = drawerItems[index];
-                return WidgetListAnimator(
-                  ListTile(
-                    leading: Icon(
-                      item['icon'],
-                      color: _page == index
-                          ? Theme.of(context).primaryColor
-                          : Theme.of(context).textTheme.title.color,
-                    ),
-                    title: Text(
-                      item['name'],
-                      style: TextStyle(
+              ListView.builder(
+                padding: new EdgeInsets.all(0.0),
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: drawerItems.length,
+                itemBuilder: (BuildContext context, int index) {
+                  Map item = drawerItems[index];
+                  return WidgetListAnimator(
+                    ListTile(
+                      leading: Icon(
+                        item['icon'],
                         color: _page == index
                             ? Theme.of(context).primaryColor
                             : Theme.of(context).textTheme.title.color,
                       ),
+                      title: Text(
+                        item['name'],
+                        style: TextStyle(
+                          color: _page == index
+                              ? Theme.of(context).primaryColor
+                              : Theme.of(context).textTheme.title.color,
+                        ),
+                      ),
+                      onTap: () {
+                        _pageController.jumpToPage(index);
+                        onSelectItem(item['name']);
+                        Navigator.pop(context);
+                      },
                     ),
-                    onTap: () {
-                      _pageController.jumpToPage(index);
-                      onSelectItem(item['name']);
-                      Navigator.pop(context);
-                    },
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+        body: PageView(
+          physics: NeverScrollableScrollPhysics(),
+          controller: _pageController,
+          onPageChanged: onPageChanged,
+          children: <Widget>[
+            Dashboard(),
+            Emergency(),
+            Admission(),
+            Operation(),
+            Beds(),
+            Services(),
+            DoctorsDepartment(),
+            Patient(),
+            Reports(),
+            ReferralCategory(),
+            Accounts(),
+            Expense(),
+            //Page2(),
           ],
         ),
-      ),
-      body: PageView(
-        physics: NeverScrollableScrollPhysics(),
-        controller: _pageController,
-        onPageChanged: onPageChanged,
-        children: <Widget>[
-          Dashboard(),
-          Emergency(),
-          Admission(),
-          Operation(),
-          Beds(),
-          Services(),
-          DoctorsDepartment(),
-          Patient(),
-          Reports(),
-          ReferralCategory(),
-          Accounts(),
-          Expense(),
-          //Page2(),
-        ],
       ),
     );
   }
