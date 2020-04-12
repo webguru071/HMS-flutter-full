@@ -1,58 +1,54 @@
-import 'package:flutter/material.dart';
 
+
+import 'dart:async';
+import 'dart:math';
+
+import 'package:flutter/material.dart';
 
 class SummaryPage extends StatefulWidget {
   @override
-  _SummaryPageState createState() => _SummaryPageState();
+  _HomePageState createState() => new _HomePageState();
 }
 
-class _SummaryPageState extends State<SummaryPage> with SingleTickerProviderStateMixin {
+class _HomePageState extends State<SummaryPage> {
+  var list;
+  var random;
 
-  List<Widget> containers = [
-    Container(
-      color: Colors.red,
-    ),
-    Container(
-      color: Colors.blue,
-    ),
-    Container(
-      color: Colors.pink,
-    ),
-  ];
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
+
+  @override
+  void initState() {
+    super.initState();
+    random = Random();
+    refreshList();
+  }
+
+  Future<Null> refreshList() async {
+    refreshKey.currentState?.show(atTop: false);
+    await Future.delayed(Duration(seconds: 2));
+
+    setState(() {
+      list = List.generate(random.nextInt(10), (i) => "Item $i");
+    });
+
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size(double.infinity, 55), // 44 is the height
-          child:    AppBar(
-            //title: Text('Sample'),
-            bottom: TabBar(
-
-              indicator: UnderlineTabIndicator(
-                borderSide: BorderSide(width: 2.0),
-                //insets: EdgeInsets.symmetric(horizontal:16.0)
-              ),
-              tabs: <Widget>[
-                Tab(
-                  text: 'Expenses',
-                ),
-                Tab(
-                  text: 'Voided',
-                ),
-                Tab(
-                  text: 'Categories',
-                ),
-              ],
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Pull to refresh"),
+      ),
+      body: RefreshIndicator(
+        key: refreshKey,
+        child: ListView.builder(
+          itemCount: list?.length,
+          itemBuilder: (context, i) => ListTile(
+            title: Text(list[i]),
           ),
         ),
-
-        body: TabBarView(
-          children: containers,
-        ),
+        onRefresh: refreshList,
       ),
     );
   }
