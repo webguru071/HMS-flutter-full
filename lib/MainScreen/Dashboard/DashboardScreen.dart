@@ -243,7 +243,8 @@ class _DashboardState extends State<Dashboard> {
                       crossAxisCount: 2),
                   itemBuilder: (context, index) {
                     return WidgetListAnimator(SuperHeroCell(context, index));
-                  }),
+                  },
+              ),
             ],
           )),
       onRefresh: refreshList,

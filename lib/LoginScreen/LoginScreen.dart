@@ -218,14 +218,14 @@ class LoginScreenState extends State<LoginScreen>
       child: RaisedButton(
         elevation: 25.0,
         onPressed: () {
-          //_staticLogin();
+          _staticLogin();
           if(email.text.isEmpty || pass.text.isEmpty){
             _validate = false;
           }
           else{
             _validate = true;
             print(_validate);
-            _login();
+            //_login();
           }
 
           //_login();
